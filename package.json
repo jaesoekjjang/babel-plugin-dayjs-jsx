@@ -11,8 +11,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node src/index.ts",
-    "dev:watch": "ts-node src/index.ts --watch",
     "build": "tsup src/index.ts --format cjs,esm"
   },
   "exports": {
@@ -35,24 +33,15 @@
     "@babel/parser": "^7.23.6",
     "@babel/plugin-syntax-jsx": "^7.23.3",
     "@emotion/babel-plugin-jsx-pragmatic": "^0.2.1",
-    "@types/react-dom": "^18.2.18",
-    "babylon": "^6.18.0",
     "dayjs": "^1.11.10",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "ts-node": "^10.9.2",
     "tsup": "^8.0.1"
   },
   "devDependencies": {
     "@babel/plugin-syntax-typescript": "^7.23.3",
     "@babel/plugin-transform-typescript": "^7.23.6",
-    "@babel/preset-env": "^7.23.8",
-    "@babel/preset-react": "^7.23.3",
-    "@babel/preset-typescript": "^7.23.3",
     "@types/babel__core": "^7.20.5",
     "@types/babel-core": "^6.25.10",
     "@types/babel-plugin-syntax-jsx": "^6.18.2",
-    "@types/node": "^20.11.0",
-    "@types/react": "^18.2.47"
+    "@types/node": "^20.11.0"
   }
 }
