@@ -21,14 +21,15 @@
     },
     "./client": "./index.d.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "dayjs",
+    "jsx",
+    "babel-plugin"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/cli": "^7.23.4",
     "@babel/core": "^7.23.7",
-    "@babel/generator": "^7.23.6",
-    "@babel/parser": "^7.23.6",
     "@babel/plugin-syntax-jsx": "^7.23.3",
     "@emotion/babel-plugin-jsx-pragmatic": "^0.2.1",
     "dayjs": "^1.11.10",
