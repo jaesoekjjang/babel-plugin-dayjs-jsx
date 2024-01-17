@@ -1,32 +1,37 @@
 import { Visitor, NodePath } from "@babel/core";
-import t from "@babel/types";
+import t, { JSXElement, JSXExpressionContainer, JSXText } from "@babel/types";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 
-import { JSXElement, JSXExpressionContainer, JSXText } from "babel-types";
+const isJSXText = (
+  nodePath: NodePath<JSXExpressionContainer> | NodePath<JSXText>
+): nodePath is NodePath<JSXText> => {
+  return nodePath.isJSXText();
+};
 
-const wrapWithDayjs = (path: NodePath<JSXExpressionContainer | JSXText>) => {
-  if (path.isJSXExpressionContainer()) {
-    const callExpression = t.callExpression(
-      t.memberExpression(
-        t.callExpression(t.identifier("dayjs"), [
-          t.stringLiteral("2021-08-03"),
-        ]),
-        t.identifier("format")
-      ),
-      []
-    );
+const getDayjsExpression = (
+  path: NodePath<JSXExpressionContainer> | NodePath<JSXText>,
+  format: string
+) => {
+  const callExpression = t.callExpression(
+    t.memberExpression(
+      t.callExpression(t.identifier("dayjs"), [
+        isJSXText(path)
+          ? t.stringLiteral(path.node.value)
+          : (path.node.expression as t.Expression),
+      ]),
+      t.identifier("format")
+    ),
+    [format ? t.stringLiteral(format) : t.nullLiteral()]
+  );
 
-    path.replaceWith(t.jsxExpressionContainer(callExpression));
-  } else {
-    // TODO: handle JSXText
-  }
+  return callExpression;
 };
 
 const isSingleJSXTextOrJSXExpressionContainer = (
   nodePath: NodePath<JSXElement | JSXExpressionContainer | JSXText>[]
-): nodePath is NodePath<JSXText | JSXExpressionContainer>[] => {
+): nodePath is (NodePath<JSXText> | NodePath<JSXExpressionContainer>)[] => {
   return (
     nodePath.length === 1 &&
     (nodePath[0].isJSXText() || nodePath[0].isJSXExpressionContainer())
@@ -35,11 +40,11 @@ const isSingleJSXTextOrJSXExpressionContainer = (
 
 const plugin = () => {
   const visitor: Visitor<{
-    opts: { tagName: string };
+    opts: { tag: string; format: string };
   }> = {
-    JSXClosingElement(path, { opts: { tagName = "day" } }) {
+    JSXOpeningElement(path, { opts: { tag = "day", format } }) {
       const jsxIdentifier = path.get("name");
-      if (!jsxIdentifier.isJSXIdentifier({ name: tagName })) return;
+      if (!jsxIdentifier.isJSXIdentifier({ name: tag })) return;
 
       const parent = path.parentPath as NodePath<JSXElement>;
       const children = parent.get("children") as NodePath<
@@ -52,7 +57,25 @@ const plugin = () => {
         );
       }
 
-      wrapWithDayjs(children[0]);
+      // props에서 format을 가져오기
+      // const formatAttr = path.node.attributes.find(
+      //   (attr) => attr.type === "JSXAttribute" && attr.name.name === "format"
+      // );
+
+      // if (t.isJSXAttribute(formatAttr)) {
+      // }
+
+      const dayjsExpression = getDayjsExpression(children[0], format);
+
+      // 경우의 수. 부모: <day/> 태그
+      // 1. 부모의 부모가 JSXExpressionContainer인 경우 => 부모를 dayjsExpression으로 대체
+      // 2. 부모의 부모가 JSXElement인 경우 => 부모를 t.JSXExpressionContainer(dayjsExpression)으로 대체
+      const grandParent = parent.parentPath;
+      if (grandParent.isJSXElement()) {
+        return parent.replaceWith(t.jsxExpressionContainer(dayjsExpression));
+      }
+
+      parent.replaceWith(dayjsExpression);
     },
   };
 
