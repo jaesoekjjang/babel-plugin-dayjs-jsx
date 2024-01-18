@@ -1,0 +1,49 @@
+{
+  "name": "babel-plugin-dayjs-jsx",
+  "version": "0.1.0",
+  "description": "dayjs helper for jsx",
+  "type": "module",
+  "typings": "./index.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup src/index.ts --format cjs,esm",
+    "build:watch": "tsup src/index.ts --format cjs,esm --watch"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./client": "./index.d.ts"
+  },
+  "keywords": [
+    "dayjs",
+    "jsx",
+    "babel-plugin"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/plugin-syntax-jsx": "^7.23.3",
+    "dayjs": "^1.11.10",
+    "tsup": "^8.0.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-syntax-typescript": "^7.23.3",
+    "@babel/plugin-transform-typescript": "^7.23.6",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel-core": "^6.25.10",
+    "@types/babel-plugin-syntax-jsx": "^6.18.2",
+    "@types/node": "^20.11.0"
+  }
+}

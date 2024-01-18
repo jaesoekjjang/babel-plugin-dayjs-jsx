@@ -1,0 +1,26 @@
+{
+  "name": "babel-plugin-dayjs-jsx-pragmatic",
+  "version": "0.1.0",
+  "main": "index.js",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "babel-plugin",
+    "dayjs",
+    "jsx",
+    "pragmatic"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.23.3"
+  },
+  "devDependencies": {
+    "@types/babel-plugin-syntax-jsx": "^6.18.2"
+  }
+}
