@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-dayjs-jsx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "dayjs helper for jsx",
   "type": "module",
   "typings": "./index.d.ts",
